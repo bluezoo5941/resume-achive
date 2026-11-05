@@ -1,0 +1,34 @@
+# Load only after ICP approval and HTTPS certificate provisioning.
+# Copy inside nginx http context (e.g. sites-available), replace certificate paths.
+limit_req_zone $binary_remote_addr zone=resume_api:10m rate=5r/s;
+limit_conn_zone $binary_remote_addr zone=resume_connections:10m;
+server {
+    listen 443 ssl;
+    server_name bluezoo.site;
+    ssl_certificate /etc/letsencrypt/live/bluezoo.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/bluezoo.site/privkey.pem;
+    client_max_body_size 6m;
+    client_body_timeout 20s;
+    limit_conn resume_connections 10;
+    location / {
+        proxy_pass http://127.0.0.1:3002;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 45s;
+    }
+    location /api/ {
+        limit_req zone=resume_api burst=20 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:3002;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 45s;
+    }
+}
+server {
+    listen 80;
+    server_name bluezoo.site;
+    return 301 https://bluezoo.site$request_uri;
+}

@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>简历档案库</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/js/app.js"></script>
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true">
+      <div class="aurora aurora-one"></div>
+      <div class="aurora aurora-two"></div>
+      <div class="aurora aurora-three"></div>
+    </div>
+    <div class="workspace">
+      <aside class="sidebar glass">
+        <a class="brand" href="/"
+          ><span class="brandmark"
+            ><svg aria-hidden="true"><use href="/icons.svg#spark" /></svg></span
+          ><span>简历档案库</span></a
+        >
+        <nav aria-label="主导航">
+          <button class="nav-item active" data-page="upload">
+            <svg aria-hidden="true"><use href="/icons.svg#upload" /></svg
+            ><span>上传简历</span><i></i>
+          </button>
+          <button class="nav-item" data-page="library">
+            <svg aria-hidden="true"><use href="/icons.svg#grid" /></svg
+            ><span>简历库</span><i></i>
+          </button>
+          <button class="nav-item" data-page="settings">
+            <svg aria-hidden="true"><use href="/icons.svg#settings" /></svg
+            ><span>模型设置</span><i></i>
+          </button>
+        </nav>
+      </aside>
+      <main>
+        <header class="topbar" id="pageTitle">上传简历</header>
+        <p class="demo-notice" id="demoNotice" hidden>
+          作品演示：请使用虚构简历。上传文本会发送至服务器配置的 AI
+          服务；文件仅当前浏览器可见，24 小时后自动清理。每份最大
+          5MB，每天最多处理 5 次（含失败重试），另有全站限额。
+        </p>
+        <section class="page active" id="upload">
+          <div class="page-heading">
+            <h1>上传简历<span class="heading-dot"></span></h1>
+          </div>
+          <div class="upload-stage glass" id="drop">
+            <div class="stage-grid" aria-hidden="true"></div>
+            <div class="stage-halo" aria-hidden="true"></div>
+            <div class="orbit orbit-one" aria-hidden="true"></div>
+            <div class="orbit orbit-two" aria-hidden="true"></div>
+            <div class="artwork" aria-hidden="true">
+              <div class="liquid-loop loop-back"></div>
+              <div class="floating-document document-back">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="floating-document document-front">
+                <div class="document-chip">
+                  <svg><use href="/icons.svg#file" /></svg>
+                </div>
+                <span></span><span></span><span></span>
+                <div class="document-dot"></div>
+              </div>
+              <div class="liquid-loop loop-front"></div>
+              <div class="spark spark-one"></div>
+              <div class="spark spark-two"></div>
+              <div class="artwork-shadow"></div>
+            </div>
+            <button class="primary-button" id="choose">
+              <svg aria-hidden="true"><use href="/icons.svg#upload" /></svg>上传
+              PDF<svg class="arrow" aria-hidden="true">
+                <use href="/icons.svg#arrow" />
+              </svg>
+            </button>
+            <input
+              id="file"
+              type="file"
+              multiple
+              accept="application/pdf,.pdf"
+              hidden
+            /><span class="drop-indicator">释放文件</span>
+          </div>
+          <p id="uploadMessage" class="message" role="status"></p>
+          <div id="uploadErrors" role="alert"></div>
+          <div class="records-heading">
+            <h2>上传记录</h2>
+            <button class="text-button" data-page="library">
+              查看简历库<svg aria-hidden="true">
+                <use href="/icons.svg#arrow" />
+              </svg>
+            </button>
+          </div>
+          <div class="recent glass" id="jobs" aria-live="polite"></div>
+        </section>
+        <section class="page" id="library">
+          <div class="page-heading">
+            <h1>简历库<span class="heading-dot"></span></h1>
+          </div>
+          <form class="searchbar glass" id="searchForm">
+            <svg aria-hidden="true"><use href="/icons.svg#search" /></svg
+            ><input
+              id="query"
+              aria-label="搜索关键词"
+              maxlength="300"
+              placeholder="搜索姓名、公司、岗位、技能…"
+            /><button
+              class="text-button filter-toggle"
+              id="filterToggle"
+              type="button"
+              aria-expanded="false"
+              aria-controls="filterPanel"
+            >
+              筛选</button
+            ><button class="primary-button compact" type="submit">
+              搜索<svg aria-hidden="true"><use href="/icons.svg#arrow" /></svg>
+            </button>
+          </form>
+          <div class="search-options">
+            <label class="scope-option"
+              ><input type="checkbox" id="fullText" />包含简历全文</label
+            ><span id="searchCount"></span>
+          </div>
+          <div class="filter-panel glass" id="filterPanel" hidden>
+            <label
+              >学历<select class="control" id="education" aria-label="学历">
+                <option value="">全部学历</option>
+                <option>博士</option>
+                <option>硕士</option>
+                <option>本科</option>
+                <option>大专</option>
+                <option>高中</option>
+                <option>中专</option>
+                <option>未识别</option>
+              </select></label
+            ><label
+              >任职公司<select
+                class="control"
+                id="company"
+                aria-label="任职公司"
+              >
+                <option value="">全部公司</option>
+              </select></label
+            ><button id="clearFilters" class="text-button" type="button">
+              清除筛选
+            </button>
+          </div>
+          <p id="libraryMessage" class="message" role="status"></p>
+          <div class="library-panel glass">
+            <table>
+              <thead>
+                <tr>
+                  <th>候选人</th>
+                  <th>岗位</th>
+                  <th>公司</th>
+                  <th>学历</th>
+                  <th>经验</th>
+                  <th>技能</th>
+                  <th>匹配内容</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+            <div id="empty" class="empty"></div>
+          </div>
+          <div class="pagination">
+            <button class="btn secondary" id="previous">上一页</button
+            ><span id="pageInfo"></span
+            ><button class="btn secondary" id="next">下一页</button>
+          </div>
+        </section>
+        <section class="page" id="detail">
+          <div class="page-heading">
+            <h1 id="detailName">简历详情</h1>
+            <button class="text-button" data-page="library">
+              返回简历库<svg aria-hidden="true">
+                <use href="/icons.svg#arrow" />
+              </svg>
+            </button>
+          </div>
+          <p id="detailMessage" class="message" role="status"></p>
+          <div class="detail-grid">
+            <article class="resume-preview glass">
+              <p id="detailFile" class="file-note"></p>
+              <img id="pdf" alt="原始 PDF 页面预览" />
+              <div class="pagination">
+                <button class="btn secondary" id="previewPrevious">
+                  上一页</button
+                ><span id="previewPage"></span
+                ><button class="btn secondary" id="previewNext">下一页</button>
+              </div>
+              <details>
+                <summary>查看提取全文</summary>
+                <pre id="rawText"></pre>
+              </details>
+            </article>
+            <article class="detail-info glass">
+              <h2>解析信息</h2>
+              <div id="facts" class="facts"></div>
+              <h3>技能</h3>
+              <div id="skills" class="tags"></div>
+              <a
+                class="primary-button compact"
+                id="download"
+                target="_blank"
+                rel="noopener"
+                >打开原始 PDF</a
+              >
+            </article>
+          </div>
+        </section>
+        <section class="page" id="settings">
+          <div class="page-heading">
+            <h1>模型设置<span class="heading-dot"></span></h1>
+          </div>
+          <form class="settings-panel glass" id="settingsForm">
+            <span class="settings-icon"
+              ><svg aria-hidden="true">
+                <use href="/icons.svg#spark" /></svg></span
+            ><label for="baseUrl">Base URL</label
+            ><input
+              id="baseUrl"
+              type="url"
+              required
+              maxlength="500"
+              placeholder="https://api.deepseek.com"
+            /><label for="apiKey">API Key</label
+            ><input
+              id="apiKey"
+              type="password"
+              autocomplete="new-password"
+              maxlength="500"
+              placeholder="留空保留原有密钥"
+            /><label for="model">模型名称</label
+            ><input
+              id="model"
+              required
+              maxlength="100"
+              placeholder="deepseek-chat"
+            />
+            <p id="keyStatus" class="muted"></p>
+            <div class="settings-actions">
+              <button class="primary-button compact" type="submit">
+                保存设置</button
+              ><button id="testModel" class="btn secondary" type="button">
+                测试连接
+              </button>
+            </div>
+            <p id="settingsMessage" class="message" role="status"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+[Unit]
+Description=Resume portfolio demo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=resume-demo
+Group=resume-demo
+WorkingDirectory=/opt/resume-demo
+EnvironmentFile=/etc/resume-demo.env
+ExecStart=/usr/local/bin/node /opt/resume-demo/server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=240
+StateDirectory=resume-demo
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/resume-demo
+MemoryMax=1500M
+TasksMax=80
+
+[Install]
+WantedBy=multi-user.target
