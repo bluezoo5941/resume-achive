@@ -5,7 +5,7 @@ function extractInWorker(file, dataDir) {
     const worker = fork(
       path.join(__dirname, "pdf-worker.js"),
       [file, dataDir],
-      { stdio: ["ignore", "ignore", "ignore", "ipc"] },
+      { windowsHide: true, stdio: ["ignore", "ignore", "ignore", "ipc"] },
     );
     const timer = setTimeout(() => {
       worker.kill();

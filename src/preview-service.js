@@ -9,7 +9,7 @@ function preview(file, page) {
     const child = fork(
       path.join(__dirname, "preview-worker.js"),
       [file, String(page)],
-      { stdio: ["ignore", "ignore", "ignore", "ipc"] },
+      { windowsHide: true, stdio: ["ignore", "ignore", "ignore", "ipc"] },
     );
     const timer = setTimeout(() => {
       child.kill();
